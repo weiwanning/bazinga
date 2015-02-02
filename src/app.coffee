@@ -8,10 +8,9 @@ cookieParser = require('cookie-parser')
 bodyParser = require('body-parser')
 
 routes = require('./routes')
-app.use routes
 
 # view engine setup
-app.set 'views', path.join(__dirname, 'views')
+app.set 'views', path.join(__dirname, '/views')
 app.engine 'html', require('ejs').renderFile
 app.set 'view engine', 'html'
 
@@ -20,7 +19,9 @@ app.use logger('dev')
 app.use bodyParser.json()
 app.use bodyParser.urlencoded()
 app.use cookieParser()
-app.use express.static(path.join(__dirname, 'public'))
+app.use express.static(path.join(__dirname, '/public'))
+
+app.use routes
 
 # error handlers
 if (app.get('env') == 'development')
