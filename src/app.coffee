@@ -2,7 +2,7 @@ express = require('express')
 app = express()
 
 path = require('path')
-# favicon = require('static-favicon')
+favicon = require('static-favicon')
 logger = require('morgan')
 cookieParser = require('cookie-parser')
 bodyParser = require('body-parser')
@@ -12,9 +12,10 @@ app.use routes
 
 # view engine setup
 app.set 'views', path.join(__dirname, 'views')
-app.set 'view engine', 'ejs'
+app.engine 'html', require('ejs').renderFile
+app.set 'view engine', 'html'
 
-# app.use favicon()
+app.use favicon()
 app.use logger('dev')
 app.use bodyParser.json()
 app.use bodyParser.urlencoded()
@@ -25,14 +26,14 @@ app.use express.static(path.join(__dirname, 'public'))
 if (app.get('env') == 'development')
     app.use (err, req, res, next) ->
         res.status err.status || 500
-        res.render 'error', {
+        res.json {
             message: err.message,
-            error: err
+            error: {}
         }
 
 app.use (err, req, res, next) ->
     res.status err.status || 500
-    res.render 'error', {
+    res.json {
         message: err.message,
         error: {}
     }
