@@ -1,10 +1,9 @@
 express = require('express')
 router = express.Router()
 
-# GET home page.
+# GET camera page.
 router.get '/', (req, resp) ->
-  console.log "home page rendered"
-  resp.render 'qrcode.html'
-  # resp.json image: true
+  console.log "camera page rendered"
+  resp.render 'camera.html'
 
 module.exports = router;
