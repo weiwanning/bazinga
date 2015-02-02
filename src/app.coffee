@@ -2,7 +2,7 @@ express = require('express')
 app = express()
 
 path = require('path')
-favicon = require('static-favicon')
+# favicon = require('static-favicon')
 logger = require('morgan')
 cookieParser = require('cookie-parser')
 bodyParser = require('body-parser')
@@ -14,7 +14,7 @@ app.use routes
 app.set 'views', path.join(__dirname, 'views')
 app.set 'view engine', 'ejs'
 
-app.use favicon()
+# app.use favicon()
 app.use logger('dev')
 app.use bodyParser.json()
 app.use bodyParser.urlencoded()
