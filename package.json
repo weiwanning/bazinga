@@ -4,7 +4,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "start": "./bin/start"
+    "start": ". ./bin/start"
   },
   "dependencies": {
     "express": "~4.0.0",
