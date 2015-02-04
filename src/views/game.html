@@ -1,0 +1,32 @@
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script>
+var $life = 2;
+$(document).on("pagecreate","#pageone",function(){
+  if (!$("#button").on("taphold", function(){
+      return false;
+    })) {
+    return;
+  }
+    
+  $(".box").on("swipe",function(){
+    $(this).hide();
+    
+    $life = $life - 1;
+    
+    if ($life == 0) {
+      $("#life").text("dead!");
+    } else {
+      $("#life").text($life);
+    }
+  });
+});
+</script>
+
+<div data-role="page" id="pageone">
+    <span id="life" style="color:red"></span>
+    <p id="button"> 无敌 </p>
+    <p>Swipe in the box below to kill it.</p>
+    <p class="box" style="border:1px solid black;height:50px;width:50px;"></p>
+    <p class="box" style="border:1px solid black;height:50px;width:50px;"></p>
+</div>

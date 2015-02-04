@@ -24,7 +24,7 @@ app.use express.static(path.join(__dirname, '/public'))
 app.use routes
 
 # error handlers
-if (app.get('env') == 'development')
+if app.get('env') == 'development'
     app.use (err, req, res, next) ->
         res.status err.status || 500
         res.json {
