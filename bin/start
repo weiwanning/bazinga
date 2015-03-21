@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-nodemon ./bin/server | bunyan
+node ./bin/server | bunyan
