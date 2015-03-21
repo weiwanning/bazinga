@@ -1,83 +1,46 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html>
-  <head>
-  <meta name="viewport" content="width=320; user-scalable=no" />
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-  <title>ColorThief Demo</title>
-  
-  <script type="text/javascript" charset="utf-8" src="jquery-2.0.0.min.js"></script>
-  <script type="text/javascript" charset="utf-8" src="quantize.js"></script>
-  <script type="text/javascript" charset="utf-8" src="color-thief.js"></script>
-        
-  <style>
-  #yourimage {
-    width:100%; 
+<style>
+  .thumb {
+    height: 75px;
+    border: 1px solid #000;
+    margin: 10px 5px 0 0;
   }
-  
-  #swatches {
-    width: 100%;
-    height: 50px; 
-  }
+</style>
 
-  .swatch {
-    width:18%;
-    height: 50px;
-    border-style:solid;
-    border-width:thin;  
-    float: left;
-    margin-right: 3px;  
-  }
-  </style>
-  </head>
+<input type="file" id="files" name="files[]" multiple />
+<output id="list"></output>
+<button id="show_score">show score</button>
 
-  <body>
+<script>
+  function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
 
-    <input type="file" capture="camera" accept="image/*" id="takePictureField">
-        
-    <img id="yourimage">
+    // Loop through the FileList and render image files as thumbnails.
+    for (var i = 0, f; f = files[i]; i++) {
 
-    <div id="swatches">
-      <div id="swatch0" class="swatch"></div>
-      <div id="swatch1" class="swatch"></div>
-      <div id="swatch2" class="swatch"></div>
-      <div id="swatch3" class="swatch"></div>
-      <div id="swatch4" class="swatch"></div>
-    </div>
-    
-    <script>
-  var desiredWidth;
+      // Only process image files.
+      if (!f.type.match('image.*')) {
+        continue;
+      }
 
-    $(document).ready(function() {
-        console.log('onReady');
-    $("#takePictureField").on("change",gotPic);
-    $("#yourimage").load(getSwatches);
-    desiredWidth = window.innerWidth;
-        
-        if(!("url" in window) && ("webkitURL" in window)) {
-            window.URL = window.webkitURL;   
-        }
-    
-  });
+      var reader = new FileReader();
 
-  function getSwatches(){
-    var colorArr = createPalette($("#yourimage"), 5);
-    for (var i = 0; i < Math.min(5, colorArr.length); i++) {
-      $("#swatch"+i).css("background-color","rgb("+colorArr[i][0]+","+colorArr[i][1]+","+colorArr[i][2]+")");
-      console.log($("#swatch"+i).css("background-color"));
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+          // Render thumbnail.
+          var span = document.createElement('span');
+          span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                            '" title="', escape(theFile.name), '"/>'].join('');
+          document.getElementById('list').insertBefore(span, null);
+        };
+      })(f);
+// Read in the image file as a data URL.
+      reader.readAsDataURL(f);
     }
-  } 
-  
-    //Credit: https://www.youtube.com/watch?v=EPYnGFEcis4&feature=youtube_gdata_player
-  function gotPic(event) {
-        if(event.target.files.length == 1 && 
-           event.target.files[0].type.indexOf("image/") == 0) {
-            $("#yourimage").attr("src",URL.createObjectURL(event.target.files[0]));
-        }
   }
-  
-  
-        
-    </script>    
-  </body>
 
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+</script>
 </html>
