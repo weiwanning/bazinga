@@ -18,43 +18,10 @@
   }
 
   .rect {
-    border-radius: 2px;
-    border: 3px solid white;
-    box-shadow: 0 16px 28px 0 rgba(0, 0, 0, 0.3);
-    cursor: pointer;
+    border: 2px solid #a64ceb;
     left: -1000px;
-    opacity: 0;
     position: absolute;
     top: -1000px;
-  }
-
-  .arrow {
-    border-bottom: 10px solid white;
-    border-left: 10px solid transparent;
-    border-right: 10px solid transparent;
-    height: 0;
-    width: 0;
-    position: absolute;
-    left: 50%;
-    margin-left: -5px;
-    bottom: -12px;
-    opacity: 0;
-  }
-
-  .input {
-    border: 0px;
-    bottom: -42px;
-    color: #a64ceb;
-    font-size: 15px;
-    height: 30px;
-    left: 50%;
-    margin-left: -90px;
-    opacity: 0;
-    outline: none;
-    position: absolute;
-    text-align: center;
-    width: 180px;
-    transition: opacity .35s ease-out;
   }
 
   #img {
@@ -71,6 +38,10 @@
   <!-- <button id="show_score">show score</button> -->
 
   <script>
+    function yourScore() {
+        return Math.floor((Math.random() * 10) + 1);
+    };
+
     function handleFileSelect(evt) {
       var f = evt.target.files[0]; // FileList object
       var reader = new FileReader();
@@ -86,7 +57,7 @@
           var rect = document.createElement('div');
           var input = document.createElement('h');
 
-          var score = Math.floor((Math.random() * 10) + 1);
+          var score = yourScore();
           input.value = score;
           document.getElementById("face_score").innerHTML = "Your Score: " + score;
 
