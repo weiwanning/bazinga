@@ -74,7 +74,8 @@
 
 <body>
   <input type="file" capture="camera" accept="image/*" id="files"/>
-  <p id="face_number">Total Face Number:</p>
+  <p id="debug">Debug Info</p>
+  <p id="face_number">Face Number Info</p>
   <output id="list"></output>
   <button id="show_score">show score</button>
 
@@ -90,8 +91,10 @@
         tracking.track(img, tracker);
 
         tracker.on('track', function(event) {
+          document.getElementById("debug").innerHTML = "tracker on tracker!"
           if (event.data.length === 0) {
             console.log("no face is tracked");
+            document.getElementById("face_number").innerHTML = "Total Face Number:" + event.data.length;
           } else {
             console.log(event.data.length + "faces are found");
             document.getElementById("face_number").innerHTML = "Total Face Number:" + event.data.length;
