@@ -7,45 +7,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Face Score</title>
+
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
-  
+  <link href="css/face_score.css" rel="stylesheet">
+
   <script src="js/dependencies/tracking-min.js"></script>
   <script src="js/dependencies/face-min.js"></script>
 
-  <style>
-  #photo:hover .rect {
-    opacity: .75;
-    transition: opacity .75s ease-out;
-  }
-
-  .rect:hover * {
-    opacity: 1;
-  }
-
-  .rect {
-    border: 2px solid #a64ceb;
-    left: -1000px;
-    position: absolute;
-    top: -1000px;
-  }
-
-  #img {
-  }
-  </style>
 </head>
 
 <body>
+
+  <p id="debug"></p>
+  <p id="face_number"></p>
+  <p id="face_score"></p>
+  <output id="list"></output>
   <div class="btn-group btn-group-justified" role="group" aria-label="input-group">
     <span class="btn btn-lg btn-default btn-primary btn-file">
       Browse <input type="file" capture="camera" accept="image/*" id="files" >
     </span>
   </div>
-  <p id="debug"></p>
-  <p id="face_number"></p>
-  <p id="face_score"></p>
-  <output id="list"></output>
-
+  
   <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
