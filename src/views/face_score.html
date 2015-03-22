@@ -74,7 +74,7 @@
 
 <body>
   <input type="file" capture="camera" accept="image/*" id="files"/>
-  <!-- <span id="photo"><img id="img" src="img/faces.jpg" /></span> -->
+  <p id="face_number">Total Face Number:</p>
   <output id="list"></output>
   <button id="show_score">show score</button>
 
@@ -94,6 +94,7 @@
             console.log("no face is tracked");
           } else {
             console.log(event.data.length + "faces are found");
+            document.getElementById("face_number").innerHTML = "Total Face Number:" + event.data.length;
             event.data.forEach(function(rect) {
               console.log("trying to plot some faces", rect);
               plotRectangle(rect.x, rect.y, rect.width, rect.height);
