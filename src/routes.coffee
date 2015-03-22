@@ -15,7 +15,7 @@ router.use "/draw.html", draw
 router.use "/game.html", game
 router.use "/face_score.html", faceScore
 router.use "/face.html", face
-router.use "score.html", score
+router.use "/score.html", score
 
 router.all "*", (req, resp) ->
   resp.status(404).json message: "Not found"
