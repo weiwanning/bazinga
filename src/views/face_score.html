@@ -10,10 +10,6 @@
   <script src="js/dependencies/face-min.js"></script>
 
   <style>
-  #yourimage {
-    width:100%;
-  }
-
   #photo:hover .rect {
     opacity: .75;
     transition: opacity .75s ease-out;
@@ -64,10 +60,10 @@
   }
 
   #img {
-    position: absolute;
+/*    position: fixed;
     top: 50%;
     left: 50%;
-    margin: -173px 0 0 -300px;
+    margin: -173px 0 0 -300px;*/
   }
   </style>
 </head>
@@ -77,7 +73,7 @@
   <p id="debug">Debug Info</p>
   <p id="face_number">Face Number Info</p>
   <output id="list"></output>
-  <button id="show_score">show score</button>
+  <!-- <button id="show_score">show score</button> -->
 
   <script>
     function handleFileSelect(evt) {
@@ -91,7 +87,7 @@
         tracking.track(img, tracker);
 
         tracker.on('track', function(event) {
-          document.getElementById("debug").innerHTML = "tracker on tracker!"
+          document.getElementById("debug").innerHTML = "tracker on track!"
           if (event.data.length === 0) {
             console.log("no face is tracked");
             document.getElementById("face_number").innerHTML = "Total Face Number:" + event.data.length;
