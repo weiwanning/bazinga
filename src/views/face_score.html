@@ -90,20 +90,23 @@
         tracking.track(img, tracker);
 
         tracker.on('track', function(event) {
-          event.data.forEach(function(rect) {
-            console.log("on track of rect", rect);
-            plotRectangle(rect.x, rect.y, rect.width, rect.height);
-          });
+          if (event.data.length === 0) {
+            console.log("no face is tracked");
+          } else {
+            console.log(event.data.length + "faces are found");
+            event.data.forEach(function(rect) {
+              console.log("trying to plot some faces", rect);
+              plotRectangle(rect.x, rect.y, rect.width, rect.height);
+            });
+          }
         });
-
-        var friends = ['face1', 'face2', 'face3', 'face4'];
 
         var plotRectangle = function(x, y, w, h) {
           var rect = document.createElement('div');
           var arrow = document.createElement('div');
           var input = document.createElement('input');
 
-          input.value = friends.pop();
+          input.value = Math.floor((Math.random() * 10) + 1);
 
           rect.onclick = function name() {
             input.select();
