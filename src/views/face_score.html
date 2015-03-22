@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=320; user-scalable=no" />
   <meta http-equiv="Content-type" content="text/html; charset=utf-8">
   <title>Face Score</title>
   
-  <script type="text/javascript" charset="utf-8" src="http://code.jquery.com/jquery-2.0.0.min.js"></script>
   <script src="js/dependencies/tracking-min.js"></script>
   <script src="js/dependencies/face-min.js"></script>
 
@@ -60,18 +58,15 @@
   }
 
   #img {
-/*    position: fixed;
-    top: 50%;
-    left: 50%;
-    margin: -173px 0 0 -300px;*/
   }
   </style>
 </head>
 
 <body>
   <input type="file" capture="camera" accept="image/*" id="files"/>
-  <p id="debug">Debug Info</p>
-  <p id="face_number">Face Number Info</p>
+  <p id="debug"></p>
+  <p id="face_number"></p>
+  <p id="face_score"></p>
   <output id="list"></output>
   <!-- <button id="show_score">show score</button> -->
 
@@ -85,9 +80,34 @@
         var tracker = new tracking.ObjectTracker('face');
 
         tracking.track(img, tracker);
+        console.log("img obj", img);
+
+        var plotRectangle = function(x, y, w, h) {
+          var rect = document.createElement('div');
+          var input = document.createElement('h');
+
+          var score = Math.floor((Math.random() * 10) + 1);
+          input.value = score;
+          document.getElementById("face_score").innerHTML = "Your Score: " + score;
+
+          // rect.onclick = function name() {
+          //   input.select();
+          // };
+
+          rect.classList.add('rect');
+          rect.appendChild(input);
+          console.log("photo", document.getElementById('photo'));
+          document.getElementById('photo').appendChild(rect);
+
+          rect.style.width = w + 'px';
+          rect.style.height = h + 'px';
+          rect.style.left = (img.offsetLeft + x) + 'px';
+          rect.style.top = (img.offsetTop + y) + 'px';
+        };
 
         tracker.on('track', function(event) {
-          document.getElementById("debug").innerHTML = "tracker on track!"
+          console.log("on track is called");
+          document.getElementById("debug").innerHTML = "tracker on track is called!"
           if (event.data.length === 0) {
             console.log("no face is tracked");
             document.getElementById("face_number").innerHTML = "Total Face Number:" + event.data.length;
@@ -100,30 +120,6 @@
             });
           }
         });
-
-        var plotRectangle = function(x, y, w, h) {
-          var rect = document.createElement('div');
-          var arrow = document.createElement('div');
-          var input = document.createElement('input');
-
-          input.value = Math.floor((Math.random() * 10) + 1);
-
-          rect.onclick = function name() {
-            input.select();
-          };
-
-          arrow.classList.add('arrow');
-          rect.classList.add('rect');
-
-          rect.appendChild(input);
-          rect.appendChild(arrow);
-          document.getElementById('photo').appendChild(rect);
-
-          rect.style.width = w + 'px';
-          rect.style.height = h + 'px';
-          rect.style.left = (img.offsetLeft + x) + 'px';
-          rect.style.top = (img.offsetTop + y) + 'px';
-        };
       };
 
       // Closure to capture the file information.
@@ -132,15 +128,19 @@
           // Render thumbnail.
           var span = document.createElement('span');
           span.setAttribute("id", "photo");
-          span.innerHTML = ['<img id="img" src="', e.target.result,
-                            '" title="', escape(theFile.name), '"/>'].join('');
+          span.innerHTML = ['<img id="img" src=', e.target.result ,' title="', escape(theFile.name), '" width=300 height=400/>'].join('');
           document.getElementById('list').insertBefore(span, null);
+          console.log("tring to call showFace");
           showFace();
+          console.log("showFace is called");
         };
       };
       // Read in the image file as a data URL.
       reader.onload = showImg(f);
+
+      console.log("trying to call readAsDataURL");
       reader.readAsDataURL(f);
+      console.log("readAsDataURL is called");
     }
 
     document.getElementById('files').addEventListener('change', handleFileSelect, false);

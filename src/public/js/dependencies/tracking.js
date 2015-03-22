@@ -135,6 +135,8 @@
    * @param {object} opt_options Optional configuration to the tracker.
    */
   tracking.track = function(element, tracker, opt_options) {
+    console.log("element.width", element.width);
+    console.log("element.height", element.height);
     element = tracking.one(element);
     if (!element) {
       throw new Error('Element not found, try a different element or selector.');
@@ -193,7 +195,10 @@
     var width = element.width;
     var height = element.height;
     var context = element.getContext('2d');
+    console.log("width", width);
+    console.log("height", height);
     var imageData = context.getImageData(0, 0, width, height);
+    console.log("iamge data", imageData);
     tracker.track(imageData.data, width, height);
   };
 
