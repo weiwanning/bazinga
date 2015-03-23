@@ -19,14 +19,14 @@
 
 <body>
 
-  <output id="list"></output>
+  <div id="list"></div>
   <div class="camera-button btn-group btn-group-justified" role="group" aria-label="input-group">
     <span class="btn btn-lg btn-default btn-primary btn-file">
       Browse <input type="file" capture="camera" accept="image/*" id="files" >
     </span>
   </div>
-
-  <!-- debug info, affecting render. -->
+  <!-- debug info, affecting rendering. -->
+  <div> Test</div>
   <p id="debug"></p>
   <p id="face_number"></p>
   <p id="face_score"></p>
@@ -52,7 +52,7 @@
         tracking.track(img, tracker);
         console.log("img obj", img);
 
-        var plotRectangle = function(x, y, w, h) {
+        var plotRectangle = function(x, y, w, h, resizeRatioHeight, resizeRatioWidth) {
           var rect = document.createElement('div');
           var input = document.createElement('h');
 
@@ -66,13 +66,13 @@
 
           rect.classList.add('rect');
           rect.appendChild(input);
-          console.log("photo", document.getElementById('photo'));
-          document.getElementById('photo').appendChild(rect);
+          console.log("list", document.getElementById('list'));
+          document.getElementById('list').appendChild(rect);
 
-          rect.style.width = w + 'px';
-          rect.style.height = h + 'px';
-          rect.style.left = (img.offsetLeft + x) + 'px';
-          rect.style.top = (img.offsetTop + y) + 'px';
+          rect.style.width = (w * resizeRatioWidth) + 'px';
+          rect.style.height = (h * resizeRatioHeight) + 'px';
+          rect.style.left = (img.offsetLeft + x * resizeRatioWidth) + 'px';
+          rect.style.top = (img.offsetTop + y * resizeRatioHeight) + 'px';
         };
 
         tracker.on('track', function(event) {
@@ -84,9 +84,15 @@
           } else {
             console.log(event.data.length + "faces are found");
             document.getElementById("face_number").innerHTML = "Total Face Number:" + event.data.length;
+
+
             event.data.forEach(function(rect) {
               console.log("trying to plot some faces", rect);
-              plotRectangle(rect.x, rect.y, rect.width, rect.height);
+              var img = document.getElementById('img');
+              var image = new Image();
+              image.src = img.src;
+
+              plotRectangle(rect.x, rect.y, rect.width, rect.height, $(img).height() / image.naturalHeight, $(img).width() / image.naturalWidth);
             });
           }
         });
@@ -96,11 +102,16 @@
       var showImg = function(theFile) {
         return function(e) {
           // Render thumbnail.
-          var span = document.createElement('span');
-          span.setAttribute("id", "photo");
-          span.innerHTML = ['<img id="img" src=', e.target.result ,' title="', escape(theFile.name), '" width=300 height=400/>'].join('');
-          document.getElementById('list').insertBefore(span, null);
-          console.log("tring to call showFace");
+          // var span = document.createElement('span');
+          // span.setAttribute("id", "photo");
+          var img = $('<img id="img">');
+          img.attr('src', e.target.result);
+          // imh.attr('class', "img");
+
+          img.appendTo('#list');
+          // span.innerHTML = ['<img id="img" src=', e.target.result ,' title="', escape(theFile.name), '" width=300 height=400/>'].join('');
+          // document.getElementById('list').insertBefore(img, null);
+          console.log("trying to call showFace");
           showFace();
           console.log("showFace is called");
         };
