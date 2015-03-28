@@ -1,0 +1,13 @@
+{
+  "name": "bazinga",
+  "version": "0.0.1",
+  "homepage": "https://github.com/weiwanning/bazinga",
+  "description": "ba ba bazinga",
+  "main": "",
+  "license": "MIT",
+  "dependencies": {
+    "tracking-elements": "~1.0.0",
+    "jquery": "~2.1.3",
+    "bootstrap": "~3.3.4"
+  }
+}

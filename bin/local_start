@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-nodemon -e coffee ./bin/server | bunyan
+nodemon -e coffee ./bin/server.js | bunyan

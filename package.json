@@ -1,8 +1,8 @@
 {
-  "name": "application-name",
+  "name": "bazinga",
   "version": "0.0.1",
   "private": true,
-  "main": "index.js",
+  "main": "",
   "scripts": {
     "start": ". ./bin/start"
   },
