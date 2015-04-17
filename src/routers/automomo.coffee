@@ -21,14 +21,17 @@ find_rumor = () ->
     client.query 'SELECT rumor FROM rumors ORDER BY random() LIMIT 1000', (err, result) ->
       done()
       if !err
-        return result.rows[0].rumor
+        console.log "rows", result.rows
+        return result.rows[0].rumor.toString()
       else 
         console.error "find_rumor query error", err
         return "默默的八卦说完了，快洗洗睡吧"
 
 insert_rumor = (message) ->
   pg.connect process.env.DATABASE_URL, (error, client, done) ->
-    client.query 'INSERT INTO rumors(rumor) VALUES (' + message + ')', (err, result) ->
+    insertQuery = 'INSERT INTO rumors(rumor) VALUES (' + message + ')'
+    console.log "insertQuery", insertQuery
+    client.query insertQuery, (err, result) ->
       done()
       if err
         console.error "insert_rumor query error", err
