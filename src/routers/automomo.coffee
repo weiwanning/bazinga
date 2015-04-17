@@ -17,18 +17,21 @@ parse_message = (from, to, message) ->
   return say
 
 find_rumor = () ->
-  pg.connect process.env.DATABASE_URL, (err, client, done) ->
+  pg.connect process.env.DATABASE_URL, (error, client, done) ->
     client.query 'SELECT rumor FROM rumors ORDER BY random() LIMIT 1000', (err, result) ->
       done()
       if !err
-        return result.rows[0].rumors
+        return result.rows[0].rumor
       else 
+        console.error "find_rumor query error", err
         return "默默的八卦说完了，快洗洗睡吧"
 
 insert_rumor = (message) ->
-  pg.connect process.env.DATABASE_URL, (err, client, done) ->
+  pg.connect process.env.DATABASE_URL, (error, client, done) ->
     client.query 'INSERT INTO rumors(rumor) VALUES (' + message + ')', (err, result) ->
       done()
+      if err
+        console.error "insert_rumor query error", err
 
 router.get "/", (req, resp) ->
   resp.status(200).send req.query.echostr
