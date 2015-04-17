@@ -17,13 +17,18 @@ parse_message = (from, to, message) ->
   return say
 
 find_rumor = () ->
-  console.log process.env.DATABASE_URL
   pg.connect process.env.DATABASE_URL, (err, client, done) ->
-    console.log "err", err
-    client.query 'SELECT * FROM rumors', (err, result) ->
+    client.query 'SELECT rumor FROM rumors ORDER BY random() LIMIT 1000', (err, result) ->
       done()
       if !err
-        console.log result.rows
+        return result.rows[0].rumors
+      else 
+        return "默默的八卦说完了，快洗洗睡吧"
+
+insert_rumor = (message) ->
+  pg.connect process.env.DATABASE_URL, (err, client, done) ->
+    client.query 'INSERT INTO rumors(rumor) VALUES (' + message + ')', (err, result) ->
+      done()
 
 router.get "/", (req, resp) ->
   resp.status(200).send req.query.echostr
@@ -35,11 +40,12 @@ router.post "/", (req, resp) ->
   fromusername = req.body.xml.fromusername[0]
   createtime   = parseInt req.body.xml.createtime[0]
   createtime   = createtime + 1
-  message      = req.body.xml.content[0]
+  message      = req.body.xml.content[0].toString()
+  content      = "这也算八卦，太坑了吧，好歹说个有诚意的呗"
 
-  find_rumor()
-  content      = "默默正在升级中，请耐心等待"
-  # content = parse_message tousername, fromusername, message
+  if message.length >= 3
+    content    = find_rumor()
+    insert_rumor(message)
 
   resp.contentType "application/xml"
   str = "<xml><ToUserName>" + fromusername + "</ToUserName>
