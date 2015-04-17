@@ -16,17 +16,15 @@ parse_message = (from, to, message) ->
     say = eliza.transform(message)
   return say
 
-find_rumor = () ->
+find_rumor = (cb) ->
   pg.connect process.env.DATABASE_URL, (error, client, done) ->
     client.query 'SELECT rumor FROM rumors ORDER BY random() LIMIT 1000', (err, result) ->
       done()
       if !err
-        console.log "rows", result.rows[0]
-        console.log "rumor", result.rows[0]['rumor']
-        return result.rows[0]['rumor']
+        cb result.rows[0]['rumor']
       else 
         console.error "find_rumor query error", err
-        return "默默的八卦说完了，快洗洗睡吧"
+        cb "默默的八卦说完了，快洗洗睡吧"
 
 insert_rumor = (message) ->
   pg.connect process.env.DATABASE_URL, (error, client, done) ->
@@ -36,6 +34,14 @@ insert_rumor = (message) ->
       done()
       if err
         console.error "insert_rumor query error", err
+
+format_str = (tousername, fromusername, createtime, content) ->
+  str = "<xml><ToUserName>"   + tousername   +  "</ToUserName>
+              <FromUserName>" + fromusername +  "</FromUserName>
+              <CreateTime>"   + createtime   +  "</CreateTime>
+              <MsgType>text</MsgType>
+              <Content><![CDATA[" + content + "]]></Content></xml>"
+  return str
 
 router.get "/", (req, resp) ->
   resp.status(200).send req.query.echostr
@@ -49,17 +55,15 @@ router.post "/", (req, resp) ->
   createtime   = createtime + 1
   message      = req.body.xml.content[0].toString()
   content      = "这也算八卦，太坑了吧，好歹说个有诚意的呗"
-
-  if message.length >= 3
-    content    = find_rumor()
-    insert_rumor(message)
-
   resp.contentType "application/xml"
-  str = "<xml><ToUserName>" + fromusername + "</ToUserName>
-            <FromUserName>" + tousername   + "</FromUserName>
-            <CreateTime>"   + createtime   + "</CreateTime>
-            <MsgType>text</MsgType>
-            <Content><![CDATA[" + content + "]]></Content></xml>"
-  resp.status(200).send str
+
+  if message.length >= 4
+    find_rumor (content) ->
+      insert_rumor(message)
+      resp.status(200).send format_str fromusername, tousername, createtime, content
+  else
+    resp.status(200).send format_str fromusername, tousername, createtime, content
 
 module.exports = router
+
+
