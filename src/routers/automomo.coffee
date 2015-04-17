@@ -65,12 +65,18 @@ router.post "/", (req, resp) ->
   else if msgtype == 'text'
     message = req.body.xml.content[0].toString()
 
-    if message && message.length >= 4
+    if message && message.length <= 4
+      resp.status(200).send format_str fromusername, tousername, createtime, content
+    else if message.match "test"
+      content = "就知道你要发test, 有点创意撒"
+      resp.status(200).send format_str fromusername, tousername, createtime, content
+    else if message.match "自动的默默"
+      content = "这你都信，怎么说你呢，年轻人"
+      resp.status(200).send format_str fromusername, tousername, createtime, content
+    else
       find_rumor (content) ->
         insert_rumor(message)
         resp.status(200).send format_str fromusername, tousername, createtime, content
-    else
-      resp.status(200).send format_str fromusername, tousername, createtime, content
 
 module.exports = router
 
