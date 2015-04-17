@@ -53,23 +53,24 @@ router.post "/", (req, resp) ->
   fromusername = req.body.xml.fromusername[0]
   createtime   = parseInt req.body.xml.createtime[0]
   createtime   = createtime + 1
-  message      = req.body.xml.content[0].toString()
   msgtype      = req.body.xml.msgtype[0]
   content      = "这也算八卦，太坑了吧，好歹说个有诚意的呗"
+  resp.contentType "application/xml"
 
   if msgtype == 'event'
     event = req.body.xml.event[0]
     if event == 'subscribe'
-      content = "欢迎订阅自动的默默，非常荣幸默默能自动为您服务。请把你想八卦／吐槽／诽谤／污蔑 的消息发给默默，默默也会随机发给你一条来自其他用户的消息。"
-
-  resp.contentType "application/xml"
-
-  if message && message.length >= 4
-    find_rumor (content) ->
-      insert_rumor(message)
-      resp.status(200).send format_str fromusername, tousername, createtime, content
-  else
+      content = "欢迎订阅自动的默默，非常荣幸默默能自动为您服务。请把你想八卦/吐槽的消息发给默默，默默也会随机发给你一条来自其他用户的八卦/吐槽消息。"
     resp.status(200).send format_str fromusername, tousername, createtime, content
+  else if msgtype == 'text'
+    message = req.body.xml.content[0].toString()
+
+    if message && message.length >= 4
+      find_rumor (content) ->
+        insert_rumor(message)
+        resp.status(200).send format_str fromusername, tousername, createtime, content
+    else
+      resp.status(200).send format_str fromusername, tousername, createtime, content
 
 module.exports = router
 
