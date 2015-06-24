@@ -21,7 +21,7 @@ router.post "/", (req, resp) ->
   if msgtype == 'event'
     event = req.body.xml.event[0]
     if event == 'subscribe'
-      content = "欢迎订阅自动的默默，非常荣幸默默能自动为您服务。"
+      content = "欢迎订阅自动的默默，非常荣幸默默能自动为您服务。发送默默推荐个电影试试吧！"
     resp.status(200).send format_str fromusername, tousername, createtime, content
   else if msgtype == 'text'
     message = req.body.xml.content[0].toString()
